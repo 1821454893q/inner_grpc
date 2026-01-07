@@ -9,7 +9,7 @@ type RankGrpcClient struct {
 	grpc RankSystemClient
 }
 
-func NewRankGrpcClient(grpcAddr string) (*ASSGrpcClient, error) {
+func NewRankGrpcClient(grpcAddr string) (*RankGrpcClient, error) {
 	// 建立连接
 	conn, err := grpc.NewClient(grpcAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
@@ -17,8 +17,8 @@ func NewRankGrpcClient(grpcAddr string) (*ASSGrpcClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	innerClient := NewArchiveInnerClient(conn)
-	return &ASSGrpcClient{innerClient}, nil
+	innerClient := NewRankSystemClient(conn)
+	return &RankGrpcClient{innerClient}, nil
 }
 
 // KickUser 踢人
