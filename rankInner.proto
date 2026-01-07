@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option go_package = ".";
+
+package RankApi;
+
+import "google/protobuf/empty.proto";
+
+// 给内部系统调用接口
+
+service RankSystem {
+  // 后台踢人
+  rpc KickUser(KickUserReq) returns (google.protobuf.Empty) {}
+  // 获取用户排名
+  rpc GetUserRank(GetUserRankReq) returns (GetUserRankResp) {}
+}
+
+message KickUserReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 用户id
+  string rankId = 3; // 榜单id 不传踢所有榜单
+  int32 kick_type = 4; // 0: 踢人 1: 不可在进入榜单
+}
+
+message GetUserRankReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 用户id
+  string rankId = 3; // 榜单id 不传获取所有
+}
+
+message RankInfo {
+  string rankId = 1;
+  string uid = 2;
+  int32 rank = 3;
+  int32 score = 4;
+}
+
+message GetUserRankResp {
+  repeated RankInfo rankInfo = 1;
+}

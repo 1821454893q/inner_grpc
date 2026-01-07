@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+option go_package = ".";
+
+import "google/protobuf/timestamp.proto";
+
+// 封装无参数无响应定义
+message Empty {}
+
+message BaseInfo {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+  int32 aid = 3; // 存档aid
+}
+
+// 枚举
+enum Code {
+  Unknown = 0; // 未知
+
+  Success = 200; // 成功
+
+  BidErr = 701; // 业务标识错误
+
+  UserNotExistErr = 720; // 用户不存在
+  ParamsErr = 732; // 请求参数错误
+
+  DisAbnormalNotAbnormalErr = 1001; // 解除黑名单 用户非黑名单
+
+  WebDestroyCodeExpiredErr = 1101; // 销毁账号 Code码过期
+  WebDestroyCodeErr = 1102; // 销毁账号 Code码错误
+  WebDestroyCodeNotFoundErr = 1103; // 销毁账号 Code码未生成
+}
+
+// 存档内部API接口定义
+service ArchiveInner {
+  rpc DisAbnormal(DisAbnormalReq) returns (Empty) {} // 关闭某个特定用户黑名单设置
+  rpc WebDestroy(WebDestroyReq) returns (Empty) {} // 通过Web方式来销毁用户的账号
+  rpc BatchAbnuser(stream BatchAbnuserReq) returns (stream BatchAbnuserResp) {} // 批量设置黑名单用户
+  rpc GetUserInfo(GetUserInfoReq) returns (GetUserInfoResp) {} // 通过Uid查询对应的aid
+  rpc GetUserInfoDid(GetUserInfoDidReq) returns (GetUserInfoDidResp) {} // 通过did查询对应的存档
+  rpc ModifyArchive(ModifyArchiveReq) returns (Empty) {} // 通过内部接口修改存档，每次只能修改一个
+  rpc GetUserInfoByKey(GetUserInfoByKeyReq) returns (GetUserInfoByKeyResp) {} // 通过内部接口修改存档，每次只能修改一个
+  rpc QueryIPForbidUser(QueryIPForbidUserReq) returns (QueryIPForbidUserResp) {} // 通过用户的 bid aid 查询玩家被被IP限制访问记录，最近20条
+  rpc ClearArchive(ClearArchiveReq) returns (Empty) {} // 清除存档
+  rpc DeleteArchive(DeleteArchiveReq) returns (Empty) {} //删除存档中用户数据，控制数据保留
+}
+
+message DeleteArchiveReq {
+  BaseInfo user_info = 1;
+}
+
+message ClearArchiveReq {
+  BaseInfo user_info = 1;
+}
+
+message QueryIPForbidUserReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+}
+
+message QueryIPForbidUserResp {
+  repeated IPForbidUserInfo lists = 1;
+}
+
+message IPForbidUserInfo {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+  string ip = 3; // 访问 IP
+  google.protobuf.Timestamp time = 4; // 时间
+}
+
+message DisAbnormalReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+  int32 aid = 3; // 存档id
+  int32 action = 4; // 默认为主动解封 action = 0 被动解封 action = 1
+}
+
+message WebDestroyReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+  int32 aid = 3; // 存档id
+  string code = 4; // code验证码
+}
+
+message BatchAbnuserReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+  int32 aid = 3; // 存档id
+  int32 reason = 4; // 黑名单原因
+}
+
+message BatchAbnuserResp {
+  Code code = 1;
+}
+
+message GetUserInfoReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+}
+
+message UserSocialInfo {
+  string sid = 1; // 社交id
+  int32 aid = 2; // 存档id
+}
+
+message GetUserInfoResp {
+  string uid = 1; // 存档uid
+  string did = 2; // 设备id
+  int64 reg_time = 3; // 注册时间
+  repeated UserSocialInfo list = 4; // 社交注册信息
+}
+
+message GetUserInfoDidReq {
+  string bid = 1; // 业务标识
+  string did = 2; // 设备id
+}
+
+message GetUserInfoDidResp {
+  string uid = 1; // 存档uid
+  string did = 2; // 设备id
+  int64 reg_time = 3; // 注册时间
+  repeated UserSocialInfo list = 4; // 社交注册信息
+}
+
+message ModifyArchiveReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+  int32 aid = 3; // 存档id
+  string key = 4; // 修改key
+  string value = 5; // 修改value
+}
+
+message GetUserInfoByKeyReq {
+  string key = 1; // 用户key
+}
+
+message GetUserInfoByKeyResp {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+  int32 aid = 3; // 存档id
+}
