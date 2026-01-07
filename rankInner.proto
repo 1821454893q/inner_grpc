@@ -33,6 +33,7 @@ message RankInfo {
   string uid = 2;
   int32 rank = 3;
   int32 score = 4;
+  string rank_key = 5; // 榜单key
 }
 
 message GetUserRankResp {

@@ -156,6 +156,7 @@ type RankInfo struct {
 	Uid           string                 `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
 	Rank          int32                  `protobuf:"varint,3,opt,name=rank,proto3" json:"rank,omitempty"`
 	Score         int32                  `protobuf:"varint,4,opt,name=score,proto3" json:"score,omitempty"`
+	RankKey       string                 `protobuf:"bytes,5,opt,name=rank_key,json=rankKey,proto3" json:"rank_key,omitempty"` // 榜单key
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -218,6 +219,13 @@ func (x *RankInfo) GetScore() int32 {
 	return 0
 }
 
+func (x *RankInfo) GetRankKey() string {
+	if x != nil {
+		return x.RankKey
+	}
+	return ""
+}
+
 type GetUserRankResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RankInfo      []*RankInfo            `protobuf:"bytes,1,rep,name=rank_info,json=rankInfo,proto3" json:"rank_info,omitempty"`
@@ -275,12 +283,13 @@ const file_rankInner_proto_rawDesc = "" +
 	"\x0eGetUserRankReq\x12\x10\n" +
 	"\x03bid\x18\x01 \x01(\tR\x03bid\x12\x10\n" +
 	"\x03uid\x18\x02 \x01(\tR\x03uid\x12\x17\n" +
-	"\arank_id\x18\x03 \x01(\tR\x06rankId\"_\n" +
+	"\arank_id\x18\x03 \x01(\tR\x06rankId\"z\n" +
 	"\bRankInfo\x12\x17\n" +
 	"\arank_id\x18\x01 \x01(\tR\x06rankId\x12\x10\n" +
 	"\x03uid\x18\x02 \x01(\tR\x03uid\x12\x12\n" +
 	"\x04rank\x18\x03 \x01(\x05R\x04rank\x12\x14\n" +
-	"\x05score\x18\x04 \x01(\x05R\x05score\"A\n" +
+	"\x05score\x18\x04 \x01(\x05R\x05score\x12\x19\n" +
+	"\brank_key\x18\x05 \x01(\tR\arankKey\"A\n" +
 	"\x0fGetUserRankResp\x12.\n" +
 	"\trank_info\x18\x01 \x03(\v2\x11.RankApi.RankInfoR\brankInfo2\x8c\x01\n" +
 	"\n" +
