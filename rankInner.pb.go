@@ -26,7 +26,7 @@ type KickUserReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Bid           string                 `protobuf:"bytes,1,opt,name=bid,proto3" json:"bid,omitempty"`                            // 业务标识
 	Uid           string                 `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`                            // 用户id
-	RankId        string                 `protobuf:"bytes,3,opt,name=rankId,proto3" json:"rankId,omitempty"`                      // 榜单id 不传踢所有榜单
+	RankId        string                 `protobuf:"bytes,3,opt,name=rank_id,json=rankId,proto3" json:"rank_id,omitempty"`        // 榜单id 不传踢所有榜单
 	KickType      int32                  `protobuf:"varint,4,opt,name=kick_type,json=kickType,proto3" json:"kick_type,omitempty"` // 0: 踢人 1: 不可在进入榜单
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -92,9 +92,9 @@ func (x *KickUserReq) GetKickType() int32 {
 
 type GetUserRankReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Bid           string                 `protobuf:"bytes,1,opt,name=bid,proto3" json:"bid,omitempty"`       // 业务标识
-	Uid           string                 `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`       // 用户id
-	RankId        string                 `protobuf:"bytes,3,opt,name=rankId,proto3" json:"rankId,omitempty"` // 榜单id 不传获取所有
+	Bid           string                 `protobuf:"bytes,1,opt,name=bid,proto3" json:"bid,omitempty"`                     // 业务标识
+	Uid           string                 `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`                     // 用户id
+	RankId        string                 `protobuf:"bytes,3,opt,name=rank_id,json=rankId,proto3" json:"rank_id,omitempty"` // 榜单id 不传获取所有
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -152,7 +152,7 @@ func (x *GetUserRankReq) GetRankId() string {
 
 type RankInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RankId        string                 `protobuf:"bytes,1,opt,name=rankId,proto3" json:"rankId,omitempty"`
+	RankId        string                 `protobuf:"bytes,1,opt,name=rank_id,json=rankId,proto3" json:"rank_id,omitempty"`
 	Uid           string                 `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
 	Rank          int32                  `protobuf:"varint,3,opt,name=rank,proto3" json:"rank,omitempty"`
 	Score         int32                  `protobuf:"varint,4,opt,name=score,proto3" json:"score,omitempty"`
@@ -220,7 +220,7 @@ func (x *RankInfo) GetScore() int32 {
 
 type GetUserRankResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RankInfo      []*RankInfo            `protobuf:"bytes,1,rep,name=rankInfo,proto3" json:"rankInfo,omitempty"`
+	RankInfo      []*RankInfo            `protobuf:"bytes,1,rep,name=rank_info,json=rankInfo,proto3" json:"rank_info,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -266,23 +266,23 @@ var File_rankInner_proto protoreflect.FileDescriptor
 
 const file_rankInner_proto_rawDesc = "" +
 	"\n" +
-	"\x0frankInner.proto\x12\aRankApi\x1a\x1bgoogle/protobuf/empty.proto\"f\n" +
+	"\x0frankInner.proto\x12\aRankApi\x1a\x1bgoogle/protobuf/empty.proto\"g\n" +
 	"\vKickUserReq\x12\x10\n" +
 	"\x03bid\x18\x01 \x01(\tR\x03bid\x12\x10\n" +
-	"\x03uid\x18\x02 \x01(\tR\x03uid\x12\x16\n" +
-	"\x06rankId\x18\x03 \x01(\tR\x06rankId\x12\x1b\n" +
-	"\tkick_type\x18\x04 \x01(\x05R\bkickType\"L\n" +
+	"\x03uid\x18\x02 \x01(\tR\x03uid\x12\x17\n" +
+	"\arank_id\x18\x03 \x01(\tR\x06rankId\x12\x1b\n" +
+	"\tkick_type\x18\x04 \x01(\x05R\bkickType\"M\n" +
 	"\x0eGetUserRankReq\x12\x10\n" +
 	"\x03bid\x18\x01 \x01(\tR\x03bid\x12\x10\n" +
-	"\x03uid\x18\x02 \x01(\tR\x03uid\x12\x16\n" +
-	"\x06rankId\x18\x03 \x01(\tR\x06rankId\"^\n" +
-	"\bRankInfo\x12\x16\n" +
-	"\x06rankId\x18\x01 \x01(\tR\x06rankId\x12\x10\n" +
+	"\x03uid\x18\x02 \x01(\tR\x03uid\x12\x17\n" +
+	"\arank_id\x18\x03 \x01(\tR\x06rankId\"_\n" +
+	"\bRankInfo\x12\x17\n" +
+	"\arank_id\x18\x01 \x01(\tR\x06rankId\x12\x10\n" +
 	"\x03uid\x18\x02 \x01(\tR\x03uid\x12\x12\n" +
 	"\x04rank\x18\x03 \x01(\x05R\x04rank\x12\x14\n" +
-	"\x05score\x18\x04 \x01(\x05R\x05score\"@\n" +
-	"\x0fGetUserRankResp\x12-\n" +
-	"\brankInfo\x18\x01 \x03(\v2\x11.RankApi.RankInfoR\brankInfo2\x8c\x01\n" +
+	"\x05score\x18\x04 \x01(\x05R\x05score\"A\n" +
+	"\x0fGetUserRankResp\x12.\n" +
+	"\trank_info\x18\x01 \x03(\v2\x11.RankApi.RankInfoR\brankInfo2\x8c\x01\n" +
 	"\n" +
 	"RankSystem\x12:\n" +
 	"\bKickUser\x12\x14.RankApi.KickUserReq\x1a\x16.google.protobuf.Empty\"\x00\x12B\n" +
@@ -309,7 +309,7 @@ var file_rankInner_proto_goTypes = []any{
 	(*emptypb.Empty)(nil),   // 4: google.protobuf.Empty
 }
 var file_rankInner_proto_depIdxs = []int32{
-	2, // 0: RankApi.GetUserRankResp.rankInfo:type_name -> RankApi.RankInfo
+	2, // 0: RankApi.GetUserRankResp.rank_info:type_name -> RankApi.RankInfo
 	0, // 1: RankApi.RankSystem.KickUser:input_type -> RankApi.KickUserReq
 	1, // 2: RankApi.RankSystem.GetUserRank:input_type -> RankApi.GetUserRankReq
 	4, // 3: RankApi.RankSystem.KickUser:output_type -> google.protobuf.Empty
