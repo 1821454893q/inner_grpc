@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = ".";
+option go_package = "./pb;inner_grpc";
 
 import "google/protobuf/timestamp.proto";
 
@@ -43,6 +43,7 @@ service ArchiveInner {
   rpc QueryIPForbidUser(QueryIPForbidUserReq) returns (QueryIPForbidUserResp) {} // 通过用户的 bid aid 查询玩家被被IP限制访问记录，最近20条
   rpc ClearArchive(ClearArchiveReq) returns (Empty) {} // 清除存档
   rpc DeleteArchive(DeleteArchiveReq) returns (Empty) {} //删除存档中用户数据，控制数据保留
+  rpc Rewards(RewardGrantRequest) returns (RewardGrantResponse) {} //资产奖励更新
 }
 
 message DeleteArchiveReq {
@@ -139,4 +140,17 @@ message GetUserInfoByKeyResp {
   string bid = 1; // 业务标识
   string uid = 2; // 存档uid
   int32 aid = 3; // 存档id
+}
+
+// 奖励发放请求
+message RewardGrantRequest {
+  string bid = 1;                // 业务标识
+  string uid = 2;                // 用户ID
+  int32 aid = 3;                // 存档ID
+  map<string, int64> rewards = 4;    // 奖励信息
+}
+
+// 奖励发放响应
+message RewardGrantResponse {
+  map<string, int64> updates = 1;  //更新后的资产信息
 }

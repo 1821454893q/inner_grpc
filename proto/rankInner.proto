@@ -1,7 +1,6 @@
 syntax = "proto3";
 
-option go_package = ".";
-
+option go_package = "./pb;rank_inner";
 package RankApi;
 
 import "google/protobuf/empty.proto";
