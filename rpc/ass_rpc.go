@@ -257,8 +257,8 @@ func (a *ASSGrpcClient) DeleteArchive(bid, uid string, aid int) error {
 	return nil
 }
 
-func (a *ASSGrpcClient) Rewards(bid, uid string, aid int, rewards map[string]int64) (map[string]int64, error) {
-	_, err := a.grpc.Rewards(ctx, &pb.RewardGrantRequest{
+func (a *ASSGrpcClient) Rewards(bid, uid string, aid int, rewards map[string]float32) (map[string]float32, error) {
+	resp, err := a.grpc.Rewards(ctx, &pb.RewardGrantRequest{
 		Bid:     bid,
 		Uid:     uid,
 		Aid:     int32(aid),
@@ -267,5 +267,5 @@ func (a *ASSGrpcClient) Rewards(bid, uid string, aid int, rewards map[string]int
 	if err != nil {
 		return nil, err
 	}
-	return rewards, nil
+	return resp.Updates, nil
 }
