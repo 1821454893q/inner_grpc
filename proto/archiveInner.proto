@@ -147,10 +147,10 @@ message RewardGrantRequest {
   string bid = 1;                // 业务标识
   string uid = 2;                // 用户ID
   int32 aid = 3;                // 存档ID
-  map<string, float> rewards = 4;    // 奖励信息
+  map<string, double> rewards = 4;    // 奖励信息
 }
 
 // 奖励发放响应
 message RewardGrantResponse {
-  map<string, float> updates = 1;  //更新后的资产信息
+  map<string, double> updates = 1;  //更新后的资产信息
 }
