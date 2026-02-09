@@ -12,7 +12,7 @@ func TestAss(t *testing.T) {
 		t.Error(err)
 	}
 
-	resp, err := c.Rewards("com.yifan.ass", "123456", 0, map[string]float64{"coin": 100})
+	resp, err := c.Rewards("com.yifan.ass", "123456", 0, map[string]int64{"coin": 100})
 	if err != nil {
 		t.Error(err)
 	}
