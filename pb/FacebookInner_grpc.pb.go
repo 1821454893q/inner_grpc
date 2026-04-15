@@ -8,7 +8,6 @@ package inner_grpc
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -23,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	FacebookSystem_ListRankInfo_FullMethodName      = "/FacebookApi.FacebookSystem/ListRankInfo"
 	FacebookSystem_UpdatePlayerScore_FullMethodName = "/FacebookApi.FacebookSystem/UpdatePlayerScore"
+	FacebookSystem_DeleteRank_FullMethodName        = "/FacebookApi.FacebookSystem/DeleteRank"
 )
 
 // FacebookSystemClient is the client API for FacebookSystem service.
@@ -33,6 +33,8 @@ type FacebookSystemClient interface {
 	ListRankInfo(ctx context.Context, in *ListRankInfoReq, opts ...grpc.CallOption) (*ListRankInfoResp, error)
 	// 修改用户分数
 	UpdatePlayerScore(ctx context.Context, in *UpdatePlayerScoreReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 删除排位赛
+	DeleteRank(ctx context.Context, in *DeleteRankReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type facebookSystemClient struct {
@@ -63,6 +65,16 @@ func (c *facebookSystemClient) UpdatePlayerScore(ctx context.Context, in *Update
 	return out, nil
 }
 
+func (c *facebookSystemClient) DeleteRank(ctx context.Context, in *DeleteRankReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, FacebookSystem_DeleteRank_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FacebookSystemServer is the server API for FacebookSystem service.
 // All implementations must embed UnimplementedFacebookSystemServer
 // for forward compatibility.
@@ -71,6 +83,8 @@ type FacebookSystemServer interface {
 	ListRankInfo(context.Context, *ListRankInfoReq) (*ListRankInfoResp, error)
 	// 修改用户分数
 	UpdatePlayerScore(context.Context, *UpdatePlayerScoreReq) (*emptypb.Empty, error)
+	// 删除排位赛
+	DeleteRank(context.Context, *DeleteRankReq) (*emptypb.Empty, error)
 	mustEmbedUnimplementedFacebookSystemServer()
 }
 
@@ -86,6 +100,9 @@ func (UnimplementedFacebookSystemServer) ListRankInfo(context.Context, *ListRank
 }
 func (UnimplementedFacebookSystemServer) UpdatePlayerScore(context.Context, *UpdatePlayerScoreReq) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdatePlayerScore not implemented")
+}
+func (UnimplementedFacebookSystemServer) DeleteRank(context.Context, *DeleteRankReq) (*emptypb.Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteRank not implemented")
 }
 func (UnimplementedFacebookSystemServer) mustEmbedUnimplementedFacebookSystemServer() {}
 func (UnimplementedFacebookSystemServer) testEmbeddedByValue()                        {}
@@ -144,6 +161,24 @@ func _FacebookSystem_UpdatePlayerScore_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FacebookSystem_DeleteRank_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRankReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FacebookSystemServer).DeleteRank(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FacebookSystem_DeleteRank_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FacebookSystemServer).DeleteRank(ctx, req.(*DeleteRankReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FacebookSystem_ServiceDesc is the grpc.ServiceDesc for FacebookSystem service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -158,6 +193,10 @@ var FacebookSystem_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePlayerScore",
 			Handler:    _FacebookSystem_UpdatePlayerScore_Handler,
+		},
+		{
+			MethodName: "DeleteRank",
+			Handler:    _FacebookSystem_DeleteRank_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

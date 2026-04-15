@@ -13,6 +13,9 @@ service FacebookSystem {
 
   // 修改用户分数
   rpc UpdatePlayerScore(UpdatePlayerScoreReq) returns (google.protobuf.Empty) {}
+
+  // 删除排位赛
+  rpc DeleteRank(DeleteRankReq) returns (google.protobuf.Empty) {}
 }
 
 // 获取排位赛数据请求
@@ -52,4 +55,10 @@ message UpdatePlayerScoreReq {
   int64 score = 4;              // 要修改成的分数
   string name = 5;              // 玩家昵称（可选，不传则不更新）
   string avatar = 6;            // 玩家头像 url（可选，不传则不更新）
+}
+
+// 删除排位赛请求
+message DeleteRankReq {
+  string app_key = 1;           // 应用渠道业务标识
+  string key = 2;               // 排位赛的 common_key，用于定位榜单
 }

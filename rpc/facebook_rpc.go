@@ -45,3 +45,12 @@ func (f *FacebookGrpcClient) UpdatePlayerScore(appKey, key, uid string, score in
 	})
 	return err
 }
+
+// DeleteRank 删除排位赛
+func (f *FacebookGrpcClient) DeleteRank(appKey, key string) error {
+	_, err := f.grpc.DeleteRank(ctx, &pb.DeleteRankReq{
+		AppKey: appKey,
+		Key:    key,
+	})
+	return err
+}
