@@ -1,7 +1,9 @@
 package mock
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	inner_grpc "github.com/1821454893q/inner_grpc/rpc"
 )
@@ -23,4 +25,53 @@ func TestAss(t *testing.T) {
 	// 	t.Error(err)
 	// }
 	// t.Log(resp)
+}
+
+func TestFacebook(t *testing.T) {
+	c, err := inner_grpc.NewFacebookGrpcClient("localhost:46125")
+	if err != nil {
+		t.Error(err)
+	}
+
+	resp, err := c.ListRankInfo("com.yifan.ass", []string{}, 0, 20)
+	if err != nil {
+		t.Error(err)
+	}
+
+	// values: key -> json 内容
+	fmt.Println("=== Values ===")
+	for k, v := range resp.Values {
+		fmt.Printf("  [%s] => %s\n", k, v)
+	}
+
+	// player: key -> 玩家列表
+	fmt.Println("\n=== Players ===")
+	for k, playerList := range resp.Player {
+		fmt.Printf("  [%s]\n", k)
+		for _, p := range playerList.List {
+			fmt.Printf("    uid=%-20s name=%-20s score=%-8d updated=%s\n",
+				p.Uid, p.Name, p.Score,
+				time.Unix(p.UpdateTimestamp, 0).Format("2006-01-02 15:04:05"),
+			)
+		}
+	}
+
+	// create_timestamp: key -> 创建时间
+	fmt.Println("\n=== CreateTimestamp ===")
+	for k, ts := range resp.CreateTimestamp {
+		fmt.Printf("  [%s] => %s\n", k, time.Unix(ts, 0).Format("2006-01-02 15:04:05"))
+	}
+}
+
+func TestFacebookScore(t *testing.T) {
+	c, err := inner_grpc.NewFacebookGrpcClient("localhost:46125")
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = c.UpdatePlayerScore("com.yifan.ass", "25361181180210862", "24959949823707476", 3200, "", "icon1")
+	if err != nil {
+		t.Error(err)
+	}
+
 }

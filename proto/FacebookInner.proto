@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option go_package = "./pb;inner_grpc";
+package FacebookApi;
+
+import "google/protobuf/empty.proto";
+
+// 给内部系统调用接口
+
+service FacebookSystem {
+  // 获取排位赛数据（对应公共数据 /v1/common/list）
+  rpc ListRankInfo(ListRankInfoReq) returns (ListRankInfoResp) {}
+
+  // 修改用户分数
+  rpc UpdatePlayerScore(UpdatePlayerScoreReq) returns (google.protobuf.Empty) {}
+}
+
+// 获取排位赛数据请求
+message ListRankInfoReq {
+  string app_key = 1;           // 应用渠道业务标识
+  repeated string keys = 2;     // 排位赛的 common_key 列表，为空时返回全部
+  int32 page_number = 3;        // 分页下标（从1开始）
+  int32 page_size = 4;          // 每页数量
+}
+
+// 获取排位赛数据响应
+message ListRankInfoResp {
+  map<string, string> values = 1;                      // key 对应的公共数据内容（json）
+  map<string, RankPlayerInfoList> player = 2;          // 每个 key 下的玩家榜单
+  map<string, int64> create_timestamp = 3;             // 每个 key 的创建时间戳（秒）
+}
+
+// 玩家榜单列表
+message RankPlayerInfoList {
+  repeated RankPlayerInfo list = 1;
+}
+
+// 榜单中的玩家信息
+message RankPlayerInfo {
+  string uid = 1;               // 玩家 id
+  string name = 2;              // 玩家昵称
+  string avatar = 3;            // 玩家头像 url
+  int64 score = 4;              // 玩家分数
+  int64 update_timestamp = 5;   // 最近更新时间戳（秒）
+}
+
+// 修改用户分数请求
+message UpdatePlayerScoreReq {
+  string app_key = 1;           // 应用渠道业务标识
+  string key = 2;               // 排位赛的 common_key，用于定位榜单
+  string uid = 3;               // 玩家 id，用于定位榜单中的记录
+  int64 score = 4;              // 要修改成的分数
+  string name = 5;              // 玩家昵称（可选，不传则不更新）
+  string avatar = 6;            // 玩家头像 url（可选，不传则不更新）
+}
