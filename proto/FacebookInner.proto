@@ -31,6 +31,7 @@ message ListRankInfoResp {
   map<string, string> values = 1;                      // key 对应的公共数据内容（json）
   map<string, RankPlayerInfoList> player = 2;          // 每个 key 下的玩家榜单
   map<string, int64> create_timestamp = 3;             // 每个 key 的创建时间戳（秒）
+  int64 total = 4; // 总数
 }
 
 // 玩家榜单列表

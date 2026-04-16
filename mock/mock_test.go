@@ -29,15 +29,19 @@ func TestAss(t *testing.T) {
 }
 
 func TestFacebook(t *testing.T) {
-	c, err := inner_grpc.NewFacebookGrpcClient("localhost:46125")
+	c, err := inner_grpc.NewFacebookGrpcClient("192.168.10.96:46125")
 	if err != nil {
 		t.Error(err)
+		return
 	}
 
 	resp, err := c.ListRankInfo("com.yifan.ass", []string{}, 0, 20)
 	if err != nil {
 		t.Error(err)
+		return
 	}
+
+	fmt.Println("total:", resp.Total)
 
 	// values: key -> json 内容
 	fmt.Println("=== Values ===")
