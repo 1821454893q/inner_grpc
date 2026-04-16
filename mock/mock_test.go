@@ -78,7 +78,7 @@ func TestFacebookScore(t *testing.T) {
 }
 
 func TestRankGuildRankList(t *testing.T) {
-	c, err := inner_grpc.NewRankGuildGrpcClient("192.168.10.96:51415")
+	c, err := inner_grpc.NewRankGuildGrpcClient("192.168.10.5:51414")
 	if err != nil {
 		t.Error(err)
 	}
@@ -94,7 +94,7 @@ func TestRankGuildRankList(t *testing.T) {
 }
 
 func TestRankGuildMemberList(t *testing.T) {
-	c, err := inner_grpc.NewRankGuildGrpcClient("192.168.10.96:51415")
+	c, err := inner_grpc.NewRankGuildGrpcClient("192.168.10.5:51414")
 	if err != nil {
 		t.Error(err)
 		return
@@ -107,6 +107,6 @@ func TestRankGuildMemberList(t *testing.T) {
 	}
 	fmt.Printf("total=%d\n", resp.Total)
 	for _, item := range resp.List {
-		fmt.Printf("  user_id=%s score=%d rank=%s ranking_key=%s\n", item.UserId, item.Score, item.Rank, item.RankingKey)
+		fmt.Printf("  user_id=%s score=%d rank=%d ranking_key=%s\n", item.UserId, item.Score, item.Rank, item.RankingKey)
 	}
 }

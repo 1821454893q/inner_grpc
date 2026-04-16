@@ -49,7 +49,7 @@ message InnerMemberScoreItem {
   string user_id = 1; // 玩家id
   int64  score   = 2; // 贡献分数
   string ranking_key = 3; // 榜单key
-  string rank = 4; // 排名
+  int64 rank = 4; // 排名
 }
 
 // 查询公会成员贡献分数响应
