@@ -1,6 +1,7 @@
 package mock
 
 import (
+	"context"
 	"fmt"
 	"testing"
 	"time"
@@ -74,4 +75,38 @@ func TestFacebookScore(t *testing.T) {
 		t.Error(err)
 	}
 
+}
+
+func TestRankGuildRankList(t *testing.T) {
+	c, err := inner_grpc.NewRankGuildGrpcClient("192.168.10.96:51415")
+	if err != nil {
+		t.Error(err)
+	}
+
+	resp, err := c.GuildRankList(context.Background(), "com.yifan.ass", "guild_test_geo", 2, 5, "")
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Printf("total=%d\n", resp.Total)
+	for _, item := range resp.List {
+		fmt.Printf("  guild_id=%s rank=%d score=%d ranking_key=%s\n", item.GuildId, item.Rank, item.Score, item.RankingKey)
+	}
+}
+
+func TestRankGuildMemberList(t *testing.T) {
+	c, err := inner_grpc.NewRankGuildGrpcClient("192.168.10.96:51415")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	resp, err := c.GuildMemberRankList(context.Background(), "com.yifan.ass", "guild_test_geo", "5970", "", 1, 2)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	fmt.Printf("total=%d\n", resp.Total)
+	for _, item := range resp.List {
+		fmt.Printf("  user_id=%s score=%d rank=%s ranking_key=%s\n", item.UserId, item.Score, item.Rank, item.RankingKey)
+	}
 }

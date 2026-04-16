@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option go_package = "./pb;inner_grpc";
+package RankGuildApi;
+
+// 给内部系统调用接口
+service RankGuildSystem {
+  // 分页查询公会榜单（全球榜/地区榜）
+  rpc GuildRankList(GuildRankListReq) returns (GuildRankListResp) {}
+  // 查询公会成员的贡献分数
+  rpc GuildMemberRankList(GuildMemberRankListReq) returns (GuildMemberRankListResp) {}
+}
+
+// 分页查询公会榜单请求
+message GuildRankListReq {
+  string app_key     = 1; // 业务标识
+  string ranking_id  = 2; // 榜单id
+  int64  page        = 3; // 页码，从1开始
+  int64  page_size   = 4; // 每页条数
+  string guild_id    = 5; // 公会id（可选，传入则只返回该公会数据）
+}
+
+// 公会榜单条目
+message InnerGuildRankItem {
+  string ranking_key = 1; // 榜单key
+  string guild_id    = 2; // 公会id
+  int64  rank        = 3; // 排名（1-based）
+  int64  score       = 4; // 公会总分
+}
+
+// 分页查询公会榜单响应
+message GuildRankListResp {
+  repeated InnerGuildRankItem list  = 1; // 榜单列表
+  int64                       total = 2; // 榜单总条数
+}
+
+// 查询公会成员贡献分数请求
+message GuildMemberRankListReq {
+  string app_key    = 1; // 业务标识
+  string ranking_id = 2; // 榜单id
+  string guild_id   = 3; // 公会id（必填）
+  string user_id    = 4; // 玩家id（可选，传入则只返回该玩家数据）
+  int64  page       = 5; // 页码，从1开始
+  int64  page_size  = 6; // 每页条数
+}
+
+// 成员贡献分数条目
+message InnerMemberScoreItem {
+  string user_id = 1; // 玩家id
+  int64  score   = 2; // 贡献分数
+  string ranking_key = 3; // 榜单key
+  string rank = 4; // 排名
+}
+
+// 查询公会成员贡献分数响应
+message GuildMemberRankListResp {
+  repeated InnerMemberScoreItem list  = 1; // 成员分数列表
+  int64                         total = 2; // 总条数
+}
