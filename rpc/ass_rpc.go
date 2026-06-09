@@ -269,3 +269,15 @@ func (a *ASSGrpcClient) Rewards(bid, uid string, aid int, rewards map[string][]b
 	}
 	return resp.Updates, nil
 }
+
+func (a *ASSGrpcClient) Destory(bid, uid string, aid int) error {
+	_, err := a.grpc.Destroy(ctx, &pb.DestroyReq{
+		Bid: bid,
+		Uid: uid,
+		Aid: int32(aid),
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}

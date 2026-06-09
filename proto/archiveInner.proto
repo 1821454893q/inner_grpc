@@ -44,6 +44,7 @@ service ArchiveInner {
   rpc ClearArchive(ClearArchiveReq) returns (Empty) {} // 清除存档
   rpc DeleteArchive(DeleteArchiveReq) returns (Empty) {} //删除存档中用户数据，控制数据保留
   rpc Rewards(RewardGrantRequest) returns (RewardGrantResponse) {} //资产奖励更新
+  rpc Destroy(DestroyReq) returns (Empty) {} // 销毁用户的账号
 }
 
 message DeleteArchiveReq {
@@ -82,6 +83,12 @@ message WebDestroyReq {
   string uid = 2; // 存档uid
   int32 aid = 3; // 存档id
   string code = 4; // code验证码
+}
+
+message DestroyReq {
+  string bid = 1; // 业务标识
+  string uid = 2; // 存档uid
+  int32 aid = 3; // 存档id
 }
 
 message BatchAbnuserReq {

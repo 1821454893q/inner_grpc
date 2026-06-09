@@ -30,6 +30,7 @@ const (
 	ArchiveInner_ClearArchive_FullMethodName      = "/ArchiveInner/ClearArchive"
 	ArchiveInner_DeleteArchive_FullMethodName     = "/ArchiveInner/DeleteArchive"
 	ArchiveInner_Rewards_FullMethodName           = "/ArchiveInner/Rewards"
+	ArchiveInner_Destroy_FullMethodName           = "/ArchiveInner/Destroy"
 )
 
 // ArchiveInnerClient is the client API for ArchiveInner service.
@@ -49,6 +50,7 @@ type ArchiveInnerClient interface {
 	ClearArchive(ctx context.Context, in *ClearArchiveReq, opts ...grpc.CallOption) (*Empty, error)
 	DeleteArchive(ctx context.Context, in *DeleteArchiveReq, opts ...grpc.CallOption) (*Empty, error)
 	Rewards(ctx context.Context, in *RewardGrantRequest, opts ...grpc.CallOption) (*RewardGrantResponse, error)
+	Destroy(ctx context.Context, in *DestroyReq, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type archiveInnerClient struct {
@@ -172,6 +174,16 @@ func (c *archiveInnerClient) Rewards(ctx context.Context, in *RewardGrantRequest
 	return out, nil
 }
 
+func (c *archiveInnerClient) Destroy(ctx context.Context, in *DestroyReq, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, ArchiveInner_Destroy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ArchiveInnerServer is the server API for ArchiveInner service.
 // All implementations must embed UnimplementedArchiveInnerServer
 // for forward compatibility.
@@ -189,6 +201,7 @@ type ArchiveInnerServer interface {
 	ClearArchive(context.Context, *ClearArchiveReq) (*Empty, error)
 	DeleteArchive(context.Context, *DeleteArchiveReq) (*Empty, error)
 	Rewards(context.Context, *RewardGrantRequest) (*RewardGrantResponse, error)
+	Destroy(context.Context, *DestroyReq) (*Empty, error)
 	mustEmbedUnimplementedArchiveInnerServer()
 }
 
@@ -231,6 +244,9 @@ func (UnimplementedArchiveInnerServer) DeleteArchive(context.Context, *DeleteArc
 }
 func (UnimplementedArchiveInnerServer) Rewards(context.Context, *RewardGrantRequest) (*RewardGrantResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Rewards not implemented")
+}
+func (UnimplementedArchiveInnerServer) Destroy(context.Context, *DestroyReq) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method Destroy not implemented")
 }
 func (UnimplementedArchiveInnerServer) mustEmbedUnimplementedArchiveInnerServer() {}
 func (UnimplementedArchiveInnerServer) testEmbeddedByValue()                      {}
@@ -440,6 +456,24 @@ func _ArchiveInner_Rewards_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ArchiveInner_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DestroyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArchiveInnerServer).Destroy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArchiveInner_Destroy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArchiveInnerServer).Destroy(ctx, req.(*DestroyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ArchiveInner_ServiceDesc is the grpc.ServiceDesc for ArchiveInner service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -486,6 +520,10 @@ var ArchiveInner_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Rewards",
 			Handler:    _ArchiveInner_Rewards_Handler,
+		},
+		{
+			MethodName: "Destroy",
+			Handler:    _ArchiveInner_Destroy_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
